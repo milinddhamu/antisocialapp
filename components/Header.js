@@ -11,48 +11,19 @@ import {
 import { HomeIcon } from '@heroicons/react/solid'
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useRecoilState } from "recoil";
-import { messageOpenState, messageUserSelectedState, modalState } from "../atoms/modalAtom";
-import { useEffect, useState } from 'react'
-import { doc, setDoc } from '@firebase/firestore'
-import { db } from '../firebase'
+import {useRecoilState} from 'recoil'
+import { modalState } from "../atoms/modalAtom";
 
-
-
-
-
-function Header() {
-  const { data: session } = useSession();
-  const [open, setOpen] = useRecoilState(modalState);
+const Header = () => {
+  const {data: session} = useSession()
+  const [open , setOpen] = useRecoilState(modalState)
   const router = useRouter()
-  const [verified, setVerified] = useState(false);
-  const [messageOpen, setMessageOpen] = useRecoilState(messageOpenState);
-  const [userSelected, setUserSelected] = useRecoilState(messageUserSelectedState)
 
-  const handleOnClick = (e) => {
-    if (verified === false) {
-      setVerified(true);
-    }
-    setMessageOpen(true);
-
+  const routeToHome = () => {
+    router.push('/')
   }
 
-  const homeIconClick = (e) => {
-    () => router.push('/')
-    setMessageOpen(false);
-    setUserSelected(null)
-  }
 
-  useEffect(() => {
-    if (session) {
-      setDoc(doc(db, 'users', session?.user?.uid), {
-        userId: session.user.uid,
-        name: session?.user?.name,
-        username: session?.user?.username,
-        userImage: session?.user?.image,
-      })
-    }
-  }, [verified])
 
 
   return (
@@ -92,15 +63,15 @@ function Header() {
 
         {/* {right} */}
         <div className="flex items-center justify-end space-x-4 mr-2">
-          <HomeIcon onClick={homeIconClick} className='navBtn' />
-          <HomeIcon onClick={homeIconClick} className='h-6 md:hidden cursor-pointer' />
-          <PaperAirplaneIcon onClick={handleOnClick} className='h-6 md:hidden cursor-pointer rotate-45' />
+          <HomeIcon onClick={routeToHome} className='navBtn' />
+          <HomeIcon onClick={routeToHome} className='h-6 md:hidden cursor-pointer' />
+          <PaperAirplaneIcon  className='h-6 mb-1 md:hidden cursor-pointer rotate-45' />
           <PlusCircleIcon onClick={() => setOpen(true)} className='h-6 md:hidden cursor-pointer' />
 
           {session ? (
             <>
               <div className="relative navBtn">
-                <PaperAirplaneIcon onClick={handleOnClick} className='navBtn rotate-45' />
+                <PaperAirplaneIcon className='navBtn rotate-45' />
                 <div className="absolute -top-1 -right-2 text-xs w-5 h-5 bg-violet-500 rounded-full flex items-center justify-center animate-pulse text-white">3</div>
 
 

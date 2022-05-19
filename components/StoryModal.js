@@ -8,6 +8,8 @@ import { addDoc, collection, doc, serverTimestamp, updateDoc, getDoc, setDoc } f
 import { useSession } from "next-auth/react";
 import { getDownloadURL, ref, uploadString } from "@firebase/storage";
 function StoryModal() {
+
+    
     const {data: session,status} = useSession();
     const [open, setOpen] = useRecoilState(StoryModalState)
     const filePickerRef = useRef(null);
